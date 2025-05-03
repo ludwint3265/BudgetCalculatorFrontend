@@ -10,14 +10,14 @@ import "./App.css";
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [userBudget, setUserBudget] = useState(0);
+  const [userBudget, setUserBudget] = useState(-1);
   const [shake, setShake] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [customCategory, setCustomCategory] = useState("");
 
   const handleBudgetChange = (event) => {
     const budget = event.target.value;
-    if (budget > 0) {
+    if (budget >= 0) {
       setUserBudget(budget);
     }
   };
@@ -84,6 +84,7 @@ function App() {
           <input
             type="number"
             placeholder="1,500"
+            min="0"
             className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[200px]"
             onChange={handleBudgetChange}
           />
@@ -129,7 +130,7 @@ function App() {
         </div>
       </div>
 
-      {userBudget && selectedCategory ? (
+      {userBudget >= 0 && selectedCategory ? (
         <div className="mb-32 flex flex-col">
           <h1 className="text-[#010810] font-bold text-4xl mb-2">
             Your AI-Generated Suggestions
@@ -139,7 +140,7 @@ function App() {
             <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
               ${userBudget}
             </b>{" "}
-            budget, here are a few{" "}
+            budget, here are some {userBudget > 0 ? " " : "free "}
             <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
               {selectedCategory}
             </b>{" "}
