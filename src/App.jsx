@@ -76,11 +76,18 @@ function App() {
       {userBudget && selectedCategory ? (
         <div className="mb-32 flex flex-col">
           <h1 className="text-[#010810] font-bold text-4xl mb-2">
-            Your AI-Generated Suggestion
+            Your AI-Generated Suggestions
           </h1>
           <h2 className="text-[#010810] font-normal text-[28px]">
-            With a <b>${userBudget}</b> budget, here are a few{" "}
-            <b>{selectedCategory}</b> options you might like:
+            With a{" "}
+            <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
+              ${userBudget}
+            </b>{" "}
+            budget, here are a few{" "}
+            <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
+              {selectedCategory}
+            </b>{" "}
+            options you might like:
           </h2>
 
           <div className="relative mt-12 text-[#F7F9FA] w-full rounded-xl p-12 bg-[linear-gradient(to_bottom_right,_#F26A50_0%,_#D95778_20%,_#A9578F_40%,_#71598F_60%,_#425479_80%,_#2F4858_100%)] font-normal text-xl">
