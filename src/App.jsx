@@ -4,6 +4,7 @@ import DollarIcon from "./assets/icons/dollarIcon.svg?react";
 import SparkIcon from "./assets/icons/sparkIcon.svg?react";
 import AddIcon from "./assets/icons/addIcon.svg?react";
 import SparksIcon from "./assets/icons/sparkIcon.svg?react";
+import ErrorIcon from "./assets/icons/errorIcon.svg?react";
 import { categories } from "./constants/categories";
 
 import "./App.css";
@@ -14,6 +15,7 @@ function App() {
   const [shake, setShake] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [customCategory, setCustomCategory] = useState("");
+  const [error, setError] = useState("");
 
   const handleBudgetChange = (event) => {
     const budget = event.target.value;
@@ -130,58 +132,95 @@ function App() {
         </div>
       </div>
 
-      {userBudget >= 0 && selectedCategory ? (
-        <div className="mb-32 flex flex-col">
-          <h1 className="text-[#010810] font-bold text-4xl mb-2">
-            Your AI-Generated Suggestions
-          </h1>
-          <h2 className="text-[#010810] font-normal text-[28px]">
-            With a{" "}
-            <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
-              ${userBudget}
-            </b>{" "}
-            budget, here are some {userBudget > 0 ? " " : "free "}
-            <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
-              {selectedCategory}
-            </b>{" "}
-            options you might like:
-          </h2>
+      <div className="mb-32 flex flex-col">
+        <h1 className="text-[#010810] font-bold text-4xl mb-2">
+          Your AI-Generated Suggestions
+        </h1>
+        {userBudget >= 0 && selectedCategory && !error ? (
+          <>
+            <h2 className="text-[#010810] font-normal text-[28px]">
+              With a{" "}
+              <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
+                ${userBudget}
+              </b>{" "}
+              budget, here are some {userBudget > 0 ? " " : "free "}
+              <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
+                {selectedCategory}
+              </b>{" "}
+              options you might like:
+            </h2>
 
-          <div className="flex flex-col gap-8 mt-12">
-            {aiSuggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className="relative text-[#F7F9FA] w-full rounded-xl p-12 bg-[linear-gradient(to_bottom_right,_#F26A50_0%,_#D95778_20%,_#A9578F_40%,_#71598F_60%,_#425479_80%,_#2F4858_100%)] font-normal text-xl"
+            <div className="flex flex-col gap-8 mt-12">
+              {aiSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="relative text-[#F7F9FA] w-full rounded-xl p-12 bg-[linear-gradient(to_bottom_right,_#F26A50_0%,_#D95778_20%,_#A9578F_40%,_#71598F_60%,_#425479_80%,_#2F4858_100%)] font-normal text-xl"
+                >
+                  <SparkIcon className="absolute top-4 right-4" />
+                  <span>{suggestion}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-8 mt-12 self-center">
+              <button
+                type="button"
+                className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer"
+                onClick={handleMoreOptions}
               >
-                <SparkIcon className="absolute top-4 right-4" />
-                <span>{suggestion}</span>
+                Show me more options
+              </button>
+              <button
+                type="button"
+                className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold cursor-pointer"
+                onClick={() => {
+                  setSelectedCategory("");
+                  setAiSuggestions([]);
+                }}
+              >
+                Choose another category
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col gap-6 mt-12 text-[#D95759] font-bold text-[28px]">
+            {userBudget < 0 || !budget ? (
+              <div className="flex gap-2 items-center">
+                <ErrorIcon />
+                <span>
+                  Please enter your budget. Budget must be a number greater than
+                  or equal to 0.
+                </span>
               </div>
-            ))}
-          </div>
+            ) : (
+              ""
+            )}
 
-          <div className="flex gap-8 mt-12 self-center">
-            <button
-              type="button"
-              className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer"
-              onClick={handleMoreOptions}
-            >
-              Show me more options
-            </button>
-            <button
-              type="button"
-              className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold cursor-pointer"
-              onClick={() => {
-                setSelectedCategory("");
-                setAiSuggestions([]);
-              }}
-            >
-              Choose another category
-            </button>
+            {!selectedCategory ? (
+              <div className="flex gap-2 items-center">
+                <ErrorIcon />
+                <span>
+                  Please select at least one category or add your own.
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {error ? (
+              <div className="flex gap-2 items-center">
+                <ErrorIcon />
+                <span>
+                  Something went wrong while generating suggestions. Please try
+                  again later.
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-        </div>
-      ) : (
-        ""
-      )}
+        )}
+      </div>
     </div>
   );
 }
