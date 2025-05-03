@@ -13,6 +13,7 @@ import "./App.css";
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [userBudget, setUserBudget] = useState(-1);
+  const [userLocation, setUserLocation] = useState("");
   const [shake, setShake] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [customCategory, setCustomCategory] = useState("");
@@ -24,6 +25,12 @@ function App() {
     if (budget >= 0) {
       setUserBudget(budget);
     }
+  };
+
+  const handleLocationChange = (event) => {
+    const location = event.target.value;
+
+    setUserLocation(location.trim());
   };
 
   const handleCategoryChange = async (category) => {
@@ -73,7 +80,7 @@ function App() {
 
   const handleAddCustomCategory = () => {
     if (
-      customCategory &&
+      customCategory.trim() &&
       !categories.some((category) => category.name === customCategory)
     ) {
       const newCategory = {
@@ -107,15 +114,26 @@ function App() {
           Tell us your budget — we’ll show you smart, personalized ideas powered
           by AI
         </h2>
-        <div className="flex items-center gap-2 self-center mt-12">
-          <DollarIcon />
-          <input
-            type="number"
-            placeholder="1,500"
-            min="0"
-            className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[200px]"
-            onChange={handleBudgetChange}
-          />
+        <div className="flex items-center gap-12 self-center mt-12">
+          <div className="flex items-center gap-2">
+            <DollarIcon />
+            <input
+              type="number"
+              placeholder="1,500"
+              min="0"
+              className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[200px]"
+              onChange={handleBudgetChange}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <DollarIcon />
+            <input
+              type="text"
+              placeholder="New York City"
+              className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[400px]"
+              onChange={handleLocationChange}
+            />
+          </div>
         </div>
       </div>
 
@@ -123,53 +141,71 @@ function App() {
         <h1 className="text-[#010810] font-bold text-4xl mb-2">
           Let’s explore your possibilities
         </h1>
-        {userBudget < 0 || !userBudget ? (
-          <div className="flex flex-col mt-12 text-[#D95759] font-bold text-[28px]">
-            <div className="flex gap-2 items-center">
-              <ErrorIcon />
-              <span>
-                Please enter your budget first. Budget must be a number greater
-                than or equal to 0.
-              </span>
-            </div>
-          </div>
-        ) : (
-          <>
-            <h2 className="text-[#010810] font-normal text-[28px]">
-              Choose how you want to make the most of your money
-            </h2>
-
-            <div className="flex flex-wrap gap-12 mt-12">
-              {categories.map((category) => (
-                <button
-                  type="button"
-                  key={category.id}
-                  className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer items-center text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
-                  onClick={() => handleCategoryChange(category.name)}
-                >
-                  {React.createElement(category.icon)}
-                  {category.name}
-                </button>
-              ))}
-              <div className="flex text-[#1C344B] border-2 border-[#1C344B] rounded-xl font-bold items-center">
-                <input
-                  type="text"
-                  placeholder="Custom Category"
-                  className="py-5 px-10 border-e-2 w-[216px] h-full rounded-l-xl"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                />
-                <button
-                  className={`flex gap-2 cursor-pointer bg-[#FDBD1D] py-5 px-3 rounded-r-xl h-full items-center ${shake ? "shake-animation" : ""}`}
-                  onClick={handleAddCustomCategory}
-                >
-                  <span>Add</span>
-                  <AddIcon />
-                </button>
+        <div className="flex flex-col gap-6 mt-12 text-[#D95759] font-bold text-[28px]">
+          {userBudget < 0 || !userBudget ? (
+            <div className="flex flex-col text-[#D95759] font-bold text-[28px]">
+              <div className="flex gap-2 items-center">
+                <ErrorIcon />
+                <span>
+                  Please enter your budget first. Budget must be a number
+                  greater than or equal to 0.
+                </span>
               </div>
             </div>
-          </>
-        )}
+          ) : (
+            ""
+          )}
+          {!userLocation ? (
+            <div className="flex flex-col text-[#D95759] font-bold text-[28px]">
+              <div className="flex gap-2 items-center">
+                <ErrorIcon />
+                <span>
+                  Please enter your preferred location — it can be a country,
+                  city, or any specific place.
+                </span>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+          {userBudget >= 0 && userLocation && (
+            <>
+              <h2 className="text-[#010810] font-normal text-[28px]">
+                Choose how you want to make the most of your money
+              </h2>
+
+              <div className="flex flex-wrap gap-12 mt-12">
+                {categories.map((category) => (
+                  <button
+                    type="button"
+                    key={category.id}
+                    className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer items-center text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
+                    onClick={() => handleCategoryChange(category.name)}
+                  >
+                    {React.createElement(category.icon)}
+                    {category.name}
+                  </button>
+                ))}
+                <div className="flex text-[#1C344B] border-2 border-[#1C344B] rounded-xl font-bold items-center">
+                  <input
+                    type="text"
+                    placeholder="Custom Category"
+                    className="py-5 px-10 border-e-2 w-[216px] h-full rounded-l-xl"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                  />
+                  <button
+                    className={`flex gap-2 cursor-pointer bg-[#FDBD1D] py-5 px-3 rounded-r-xl h-full items-center ${shake ? "shake-animation" : ""}`}
+                    onClick={handleAddCustomCategory}
+                  >
+                    <span>Add</span>
+                    <AddIcon />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="mb-32 flex flex-col">
@@ -242,7 +278,8 @@ function App() {
               <div className="flex gap-2 items-center">
                 <ErrorIcon />
                 <span>
-                  Please select at least one category or add your own.
+                  Please select at least one category and up to 3, or add your
+                  own.
                 </span>
               </div>
             ) : (
