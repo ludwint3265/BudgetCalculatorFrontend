@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import logo from "/logo.svg";
 import DollarIcon from "./assets/icons/dollarIcon.svg?react";
 import SparkIcon from "./assets/icons/sparkIcon.svg?react";
+import AddIcon from "./assets/icons/addIcon.svg?react";
+import SparksIcon from "./assets/icons/sparkIcon.svg?react";
 import { categories } from "./constants/categories";
+
+import "./App.css";
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [userBudget, setUserBudget] = useState(0);
+  const [shake, setShake] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [customCategory, setCustomCategory] = useState("");
 
   const handleBudgetChange = (event) => {
     const budget = event.target.value;
@@ -35,6 +41,27 @@ function App() {
       "Weekend Beach Retreat: Visit the Florida Keys or the Amalfi Coast. Enjoy affordable beachside accommodations and local seafood.",
       "Cultural Immersion: Explore local festivals or events in your chosen destination. Engage with locals and enjoy authentic experiences.",
     ]);
+  };
+
+  const handleAddCustomCategory = () => {
+    if (
+      customCategory &&
+      !categories.some((category) => category.name === customCategory)
+    ) {
+      const newCategory = {
+        id: categories.length + 1,
+        name: customCategory,
+        icon: SparksIcon,
+      };
+      categories.push(newCategory);
+      setCustomCategory("");
+      setSelectedCategory(customCategory);
+      handleCategoryChange(customCategory);
+    } else {
+      setCustomCategory("");
+      setShake(true);
+      setTimeout(() => setShake(false), 400);
+    }
   };
 
   return (
@@ -76,13 +103,29 @@ function App() {
             <button
               type="button"
               key={category.id}
-              className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
+              className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer items-center text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
               onClick={() => handleCategoryChange(category.name)}
             >
               {React.createElement(category.icon)}
               {category.name}
             </button>
           ))}
+          <div className="flex text-[#1C344B] border-2 border-[#1C344B] rounded-xl font-bold items-center">
+            <input
+              type="text"
+              placeholder="Custom Category"
+              className="py-5 px-10 border-e-2 w-[216px] h-full rounded-l-xl"
+              value={customCategory}
+              onChange={(e) => setCustomCategory(e.target.value)}
+            />
+            <button
+              className={`flex gap-2 cursor-pointer bg-[#FDBD1D] py-5 px-3 rounded-r-xl h-full items-center ${shake ? "shake-animation" : ""}`}
+              onClick={handleAddCustomCategory}
+            >
+              <span>Add</span>
+              <AddIcon />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -126,7 +169,10 @@ function App() {
             <button
               type="button"
               className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold cursor-pointer"
-              onClick={() => setSelectedCategory("")}
+              onClick={() => {
+                setSelectedCategory("");
+                setAiSuggestions([]);
+              }}
             >
               Choose another category
             </button>
