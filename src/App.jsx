@@ -47,9 +47,15 @@ function App() {
         if (!res.ok) throw new Error("Failed to fetch suggestions");
 
         const data = await res.json();
-        setAiSuggestions(data.suggestions);
+
+        if (data.error) {
+          setErrorMessage(data.error);
+          setAiSuggestions([]);
+        } else {
+          setAiSuggestions(data.suggestions);
+        }
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       } finally {
         setLoading(false);
       }
