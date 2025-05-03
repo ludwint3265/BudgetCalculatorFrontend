@@ -7,21 +7,34 @@ import { categories } from "./constants/categories";
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [userBudget, setUserBudget] = useState(0);
-  const [aiSuggestion, setAiSuggestion] =
-    useState(`3–4 Day City Escape: Explore Lisbon, Portugal or Mexico City. Enjoy affordable flights, boutique hotels, and authentic local food — all within budget.
-
-	      Nature Getaway: Spend a relaxing long weekend in Colorado or British Columbia, focusing on hiking, local lodges, and scenic views.
-
-	      Budget Tip: Travel mid-week for cheaper flights and consider hostels or Airbnb stays for more savings.
-
-              Stretch Your Dollar: Use a travel rewards card to offset costs or book during off-season for lower rates.
-`);
+  const [aiSuggestions, setAiSuggestions] = useState([]);
 
   const handleBudgetChange = (event) => {
     const budget = event.target.value;
     if (budget > 0) {
       setUserBudget(budget);
     }
+  };
+
+  const handleCategoryChange = (category) => {
+    if (selectedCategory !== category) {
+      setSelectedCategory(category);
+      //TODO: Call api here, this is just mock data
+      setAiSuggestions([
+        "3–4 Day City Escape: Explore Lisbon, Portugal or Mexico City. Enjoy affordable flights, boutique hotels, and authentic local food — all within budget.",
+        "Nature Getaway: Spend a relaxing long weekend in Colorado or British Columbia, focusing on hiking, local lodges, and scenic views.",
+        "Stretch Your Dollar: Use a travel rewards card to offset costs or book during off-season for lower rates.",
+      ]);
+    }
+  };
+
+  const handleMoreOptions = () => {
+    //TODO: here we call other endpoint to get more options different from the first ones
+    setAiSuggestions([
+      "5–7 Day Road Trip: Drive through the Pacific Coast Highway or Route 66. Enjoy scenic views, local diners, and budget-friendly motels.",
+      "Weekend Beach Retreat: Visit the Florida Keys or the Amalfi Coast. Enjoy affordable beachside accommodations and local seafood.",
+      "Cultural Immersion: Explore local festivals or events in your chosen destination. Engage with locals and enjoy authentic experiences.",
+    ]);
   };
 
   return (
@@ -64,7 +77,7 @@ function App() {
               type="button"
               key={category.id}
               className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
-              onClick={() => setSelectedCategory(category.name)}
+              onClick={() => handleCategoryChange(category.name)}
             >
               {React.createElement(category.icon)}
               {category.name}
@@ -90,16 +103,23 @@ function App() {
             options you might like:
           </h2>
 
-          <div className="relative mt-12 text-[#F7F9FA] w-full rounded-xl p-12 bg-[linear-gradient(to_bottom_right,_#F26A50_0%,_#D95778_20%,_#A9578F_40%,_#71598F_60%,_#425479_80%,_#2F4858_100%)] font-normal text-xl">
-            <SparkIcon className="absolute top-4 left-4" />
-            <span>{aiSuggestion}</span>
+          <div className="flex flex-col gap-8 mt-12">
+            {aiSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className="relative text-[#F7F9FA] w-full rounded-xl p-12 bg-[linear-gradient(to_bottom_right,_#F26A50_0%,_#D95778_20%,_#A9578F_40%,_#71598F_60%,_#425479_80%,_#2F4858_100%)] font-normal text-xl"
+              >
+                <SparkIcon className="absolute top-4 right-4" />
+                <span>{suggestion}</span>
+              </div>
+            ))}
           </div>
 
           <div className="flex gap-8 mt-12 self-center">
             <button
               type="button"
               className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer"
-              onClick={() => setAiSuggestion("Here are some more options...")}
+              onClick={handleMoreOptions}
             >
               Show me more options
             </button>
