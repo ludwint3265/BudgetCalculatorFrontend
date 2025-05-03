@@ -91,13 +91,15 @@ function App() {
           <div className="flex gap-8 mt-12 self-center">
             <button
               type="button"
-              className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold"
+              className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer"
+              onClick={() => setAiSuggestion("Here are some more options...")}
             >
               Show me more options
             </button>
             <button
               type="button"
-              className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold"
+              className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold cursor-pointer"
+              onClick={() => setSelectedCategory("")}
             >
               Choose another category
             </button>
