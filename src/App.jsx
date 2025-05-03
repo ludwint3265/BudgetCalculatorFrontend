@@ -67,7 +67,7 @@ function App() {
   };
 
   return (
-    <div className="pt-10 px-32 flex flex-col">
+    <div className="pt-10 px-8 md:px-16 xl:px-32 2xl:px-64 flex flex-col">
       <div className="flex justify-center items-center gap-2 mb-16">
         <img src={logo} alt="PennyPath Logo" />
         <span className="text-[#1C344B] font-bold text-5xl">PennyPath</span>
