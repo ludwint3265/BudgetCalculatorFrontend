@@ -117,39 +117,53 @@ function App() {
         <h1 className="text-[#010810] font-bold text-4xl mb-2">
           Let’s explore your possibilities
         </h1>
-        <h2 className="text-[#010810] font-normal text-[28px]">
-          Choose how you want to make the most of your money
-        </h2>
-
-        <div className="flex flex-wrap gap-12 mt-12">
-          {categories.map((category) => (
-            <button
-              type="button"
-              key={category.id}
-              className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer items-center text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
-              onClick={() => handleCategoryChange(category.name)}
-            >
-              {React.createElement(category.icon)}
-              {category.name}
-            </button>
-          ))}
-          <div className="flex text-[#1C344B] border-2 border-[#1C344B] rounded-xl font-bold items-center">
-            <input
-              type="text"
-              placeholder="Custom Category"
-              className="py-5 px-10 border-e-2 w-[216px] h-full rounded-l-xl"
-              value={customCategory}
-              onChange={(e) => setCustomCategory(e.target.value)}
-            />
-            <button
-              className={`flex gap-2 cursor-pointer bg-[#FDBD1D] py-5 px-3 rounded-r-xl h-full items-center ${shake ? "shake-animation" : ""}`}
-              onClick={handleAddCustomCategory}
-            >
-              <span>Add</span>
-              <AddIcon />
-            </button>
+        {userBudget < 0 || !userBudget ? (
+          <div className="flex flex-col mt-12 text-[#D95759] font-bold text-[28px]">
+            <div className="flex gap-2 items-center">
+              <ErrorIcon />
+              <span>
+                Please enter your budget first. Budget must be a number greater
+                than or equal to 0.
+              </span>
+            </div>
           </div>
-        </div>
+        ) : (
+          <>
+            <h2 className="text-[#010810] font-normal text-[28px]">
+              Choose how you want to make the most of your money
+            </h2>
+
+            <div className="flex flex-wrap gap-12 mt-12">
+              {categories.map((category) => (
+                <button
+                  type="button"
+                  key={category.id}
+                  className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer items-center text-[#1C344B] ${selectedCategory === category.name ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
+                  onClick={() => handleCategoryChange(category.name)}
+                >
+                  {React.createElement(category.icon)}
+                  {category.name}
+                </button>
+              ))}
+              <div className="flex text-[#1C344B] border-2 border-[#1C344B] rounded-xl font-bold items-center">
+                <input
+                  type="text"
+                  placeholder="Custom Category"
+                  className="py-5 px-10 border-e-2 w-[216px] h-full rounded-l-xl"
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                />
+                <button
+                  className={`flex gap-2 cursor-pointer bg-[#FDBD1D] py-5 px-3 rounded-r-xl h-full items-center ${shake ? "shake-animation" : ""}`}
+                  onClick={handleAddCustomCategory}
+                >
+                  <span>Add</span>
+                  <AddIcon />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="mb-32 flex flex-col">
@@ -218,18 +232,6 @@ function App() {
           )
         ) : (
           <div className="flex flex-col gap-6 mt-12 text-[#D95759] font-bold text-[28px]">
-            {userBudget < 0 || !userBudget ? (
-              <div className="flex gap-2 items-center">
-                <ErrorIcon />
-                <span>
-                  Please enter your budget. Budget must be a number greater than
-                  or equal to 0.
-                </span>
-              </div>
-            ) : (
-              ""
-            )}
-
             {!selectedCategory ? (
               <div className="flex gap-2 items-center">
                 <ErrorIcon />
