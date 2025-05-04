@@ -6,6 +6,7 @@ import SparkIcon from "./assets/icons/sparkIcon.svg?react";
 import AddIcon from "./assets/icons/addIcon.svg?react";
 import SparksIcon from "./assets/icons/sparkIcon.svg?react";
 import ErrorIcon from "./assets/icons/errorIcon.svg?react";
+import { cleanData } from "./utils/dataCleanUp";
 import { categories } from "./constants/categories";
 import { API_URL, API_DEV } from "./constants/API";
 
@@ -72,7 +73,7 @@ function App() {
           console.log(data.error);
           setAiSuggestions([]);
         } else {
-          setAiSuggestions(data.suggestions);
+          setAiSuggestions(cleanData(data.suggestions));
         }
       } catch (error) {
         setErrorMessage(error.message);
