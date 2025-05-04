@@ -162,7 +162,7 @@ function App() {
             <input
               type="text"
               placeholder="New York City"
-              className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[400px]"
+              className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[300px] sm:w-[400px]"
               onChange={handleLocationChange}
             />
           </div>
