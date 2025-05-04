@@ -146,7 +146,7 @@ function App() {
           Tell us your budget — we’ll show you smart, personalized ideas powered
           by AI
         </h2>
-        <div className="flex items-center gap-12 self-center mt-12">
+        <div className="flex items-center gap-12 self-center mt-12 flex-col lg:flex-row">
           <div className="flex items-center gap-2">
             <DollarIcon />
             <input
