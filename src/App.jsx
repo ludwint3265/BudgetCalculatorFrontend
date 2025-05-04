@@ -42,6 +42,7 @@ function App() {
       selectedCategories.length > 0 &&
       selectedCategories.length <= 3
     ) {
+      setMissingFields(false);
       setLoading(true);
 
       try {
@@ -199,8 +200,9 @@ function App() {
           </div>
           <button
             type="button"
-            className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer mt-12 self-center"
+            className={`bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold mt-12 self-center ${loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             onClick={generateSuggestions}
+            disabled={loading}
           >
             Generate Suggestions
           </button>
@@ -224,7 +226,7 @@ function App() {
           ""
         )}
 
-        {aiSuggestions.length > 0 && !errorMessage ? (
+        {aiSuggestions.length > 0 && !errorMessage && !missingFields ? (
           <>
             <h1 className="text-[#010810] font-bold text-4xl mb-2">
               Your AI-Generated Suggestions
