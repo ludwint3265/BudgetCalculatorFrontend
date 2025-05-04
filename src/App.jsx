@@ -51,7 +51,7 @@ function App() {
       setLoading(true);
 
       try {
-        const res = await fetch(`${API_DEV}/get-suggestions`, {
+        const res = await fetch(`${API_URL}/get-suggestions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -279,7 +279,7 @@ function App() {
                 type="button"
                 className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold cursor-pointer"
                 onClick={() => {
-                  setSelectedCategories("");
+                  setSelectedCategories([]);
                   setAiSuggestions([]);
                 }}
               >
