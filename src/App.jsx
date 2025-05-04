@@ -7,7 +7,7 @@ import AddIcon from "./assets/icons/addIcon.svg?react";
 import SparksIcon from "./assets/icons/sparkIcon.svg?react";
 import ErrorIcon from "./assets/icons/errorIcon.svg?react";
 import { categories } from "./constants/categories";
-import { API_URL } from "./constants/API";
+import { API_URL, API_DEV } from "./constants/API";
 
 import "./App.css";
 
@@ -38,6 +38,7 @@ function App() {
 
   const generateSuggestions = async () => {
     setErrorMessage("");
+    setAiSuggestions([]);
 
     if (
       userBudget >= 0 &&
@@ -49,7 +50,7 @@ function App() {
       setLoading(true);
 
       try {
-        const res = await fetch(`${API_URL}/get-suggestions`, {
+        const res = await fetch(`${API_DEV}/get-suggestions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -94,15 +95,6 @@ function App() {
     if (selectedCategories.length < 3) {
       setSelectedCategories([...selectedCategories, category]);
     }
-  };
-
-  const handleMoreOptions = () => {
-    //TODO: here we call other endpoint to get more options different from the first ones
-    setAiSuggestions([
-      "5–7 Day Road Trip: Drive through the Pacific Coast Highway or Route 66. Enjoy scenic views, local diners, and budget-friendly motels.",
-      "Weekend Beach Retreat: Visit the Florida Keys or the Amalfi Coast. Enjoy affordable beachside accommodations and local seafood.",
-      "Cultural Immersion: Explore local festivals or events in your chosen destination. Engage with locals and enjoy authentic experiences.",
-    ]);
   };
 
   const handleAddCustomCategory = () => {
@@ -255,7 +247,11 @@ function App() {
               <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
                 {selectedCategories.join(", ")}
               </b>{" "}
-              options you might like:
+              options in{" "}
+              <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
+                {userLocation}
+              </b>{" "}
+              you might like:
             </h2>
 
             <div className="flex flex-col gap-8 mt-12">
@@ -274,7 +270,7 @@ function App() {
               <button
                 type="button"
                 className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer"
-                onClick={handleMoreOptions}
+                onClick={generateSuggestions}
               >
                 Show me more options
               </button>
