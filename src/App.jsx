@@ -279,7 +279,7 @@ function App() {
                 type="button"
                 className="bg-[#F7F9FA] text-[#1C344B] border-2 border-[#1C344B] rounded-xl py-3 px-8 font-bold cursor-pointer"
                 onClick={() => {
-                  setSelectedCategories("");
+                  setSelectedCategories([]);
                   setAiSuggestions([]);
                 }}
               >
