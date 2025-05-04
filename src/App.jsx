@@ -6,8 +6,9 @@ import SparkIcon from "./assets/icons/sparkIcon.svg?react";
 import AddIcon from "./assets/icons/addIcon.svg?react";
 import SparksIcon from "./assets/icons/sparkIcon.svg?react";
 import ErrorIcon from "./assets/icons/errorIcon.svg?react";
+import { cleanData } from "./utils/dataCleanUp";
 import { categories } from "./constants/categories";
-import { API_URL } from "./constants/API";
+import { API_URL, API_DEV } from "./constants/API";
 
 import "./App.css";
 
@@ -38,6 +39,7 @@ function App() {
 
   const generateSuggestions = async () => {
     setErrorMessage("");
+    setAiSuggestions([]);
 
     if (
       userBudget >= 0 &&
@@ -49,7 +51,7 @@ function App() {
       setLoading(true);
 
       try {
-        const res = await fetch(`${API_URL}/get-suggestions`, {
+        const res = await fetch(`${API_DEV}/get-suggestions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -71,7 +73,7 @@ function App() {
           console.log(data.error);
           setAiSuggestions([]);
         } else {
-          setAiSuggestions(data.suggestions);
+          setAiSuggestions(cleanData(data.suggestions));
         }
       } catch (error) {
         setErrorMessage(error.message);
@@ -94,15 +96,6 @@ function App() {
     if (selectedCategories.length < 3) {
       setSelectedCategories([...selectedCategories, category]);
     }
-  };
-
-  const handleMoreOptions = () => {
-    //TODO: here we call other endpoint to get more options different from the first ones
-    setAiSuggestions([
-      "5–7 Day Road Trip: Drive through the Pacific Coast Highway or Route 66. Enjoy scenic views, local diners, and budget-friendly motels.",
-      "Weekend Beach Retreat: Visit the Florida Keys or the Amalfi Coast. Enjoy affordable beachside accommodations and local seafood.",
-      "Cultural Immersion: Explore local festivals or events in your chosen destination. Engage with locals and enjoy authentic experiences.",
-    ]);
   };
 
   const handleAddCustomCategory = () => {
@@ -146,7 +139,7 @@ function App() {
           Tell us your budget — we’ll show you smart, personalized ideas powered
           by AI
         </h2>
-        <div className="flex items-center gap-12 self-center mt-12">
+        <div className="flex items-center gap-12 self-center mt-12 flex-col lg:flex-row">
           <div className="flex items-center gap-2">
             <DollarIcon />
             <input
@@ -162,7 +155,7 @@ function App() {
             <input
               type="text"
               placeholder="New York City"
-              className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[400px]"
+              className="font-bold text-[28px] border-2 border-[#1C344B] rounded-lg px-6 py-3 text-center w-[300px] sm:w-[400px]"
               onChange={handleLocationChange}
             />
           </div>
@@ -255,7 +248,11 @@ function App() {
               <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
                 {selectedCategories.join(", ")}
               </b>{" "}
-              options you might like:
+              options in{" "}
+              <b className="underline decoration-[#FDBD1D] decoration-4 underline-offset-8">
+                {userLocation}
+              </b>{" "}
+              you might like:
             </h2>
 
             <div className="flex flex-col gap-8 mt-12">
@@ -274,7 +271,7 @@ function App() {
               <button
                 type="button"
                 className="bg-[#1C344B] rounded-xl py-3 px-8 text-white font-bold cursor-pointer"
-                onClick={handleMoreOptions}
+                onClick={generateSuggestions}
               >
                 Show me more options
               </button>
