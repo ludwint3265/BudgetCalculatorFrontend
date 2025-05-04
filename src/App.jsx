@@ -110,7 +110,7 @@ function App() {
       customCategory.trim() &&
       !categories.includes(
         (category) =>
-          category.name.toLowerCase() === customCategory.toLowerCase(),
+          category.name.toLowerCase() === customCategory.trim().toLowerCase(),
       )
     ) {
       const newCategory = {
@@ -120,8 +120,10 @@ function App() {
       };
       categories.push(newCategory);
       setCustomCategory("");
-      setSelectedCategories(customCategory);
-      handleCategoryChange(customCategory);
+
+      if (selectedCategories.length < 3) {
+        setSelectedCategories([...selectedCategories, customCategory]);
+      }
     } else {
       setCustomCategory("");
       setShake(true);
@@ -180,8 +182,12 @@ function App() {
               <button
                 type="button"
                 key={category.id}
-                className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold cursor-pointer items-center text-xl text-[#1C344B] ${selectedCategories.includes(category.name) ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"}`}
+                className={`flex py-5 px-10 gap-3 rounded-xl border-2 border-[#1C344B] font-bold items-center text-xl text-[#1C344B] ${selectedCategories.includes(category.name) ? "bg-[#FDBD1D]" : "bg-[#F7F9FA] hover:bg-[#FFEEC4]"} ${selectedCategories.length >= 3 && !selectedCategories.includes(category.name) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 onClick={() => handleCategoryChange(category.name)}
+                disabled={
+                  selectedCategories.length >= 3 &&
+                  !selectedCategories.includes(category.name)
+                }
               >
                 {React.createElement(category.icon)}
                 {category.name}
